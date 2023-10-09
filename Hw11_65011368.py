@@ -49,6 +49,31 @@ class Student(persistent.Persistent):
     def printTranscript(self):
         print(self.__str__())
 
+        # Calculate GPA
+        total_credit = 0
+        total_grade_points = 0
+
+        for enrollment in self.enrolls:
+            grade = enrollment.grade
+
+            if grade == "A":
+                grade_points = 4.0
+            elif grade == "B":
+                grade_points = 3.0
+            elif grade == "C":
+                grade_points = 2.0
+            elif grade == "D":
+                grade_points = 1.0
+            else:
+                grade_points = 0.0
+
+            total_credit += enrollment.courseObject.credit
+            total_grade_points += grade_points * enrollment.courseObject.credit
+
+        if total_credit > 0:
+            gpa = total_grade_points / total_credit
+            print(f"Total GPA: {gpa:.2f}")
+
     def setName(self, name):
         self.name = name
 
@@ -89,14 +114,14 @@ course1 = Course("CSCI101", 3, "Introduction to OOP")
 course2 = Course("54011999", 4, "Calculus")
 
 # Create Student objects and enroll them in courses
-student1 = Student("101", "Alice",[])
+student1 = Student("101", "Alice", [])
 student1.enrollCourse(course1, "C")
 
-student2 = Student("201", "Bob",[])
+student2 = Student("201", "Bob", [])
 student2.enrollCourse(course1, "A")
 student2.enrollCourse(course2, "B")
 
-student3 = Student("101", "Alice",[])
+student3 = Student("301", "Charlie", [])
 student3.enrollCourse(course2, "C")
 
 # Store the objects in the database using BTrees
